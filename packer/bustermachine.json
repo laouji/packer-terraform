@@ -1,0 +1,18 @@
+{
+  "builders": [{
+    "type": "digitalocean",
+    "api_token": "nottherealtoken",
+    "region": "fra1",
+    "size": "512mb",
+    "image": "centos-7-2-x64",
+    "ssh_pty": true,
+    "droplet_name": "bustermachine",
+    "snapshot_name": "bustermachine-img-{{timestamp}}"
+  }],
+  "provisioners": [{
+    "type": "chef-solo",
+    "cookbook_paths": ["cookbooks"],
+    "data_bags_path": "data_bags",
+    "run_list": [ "recipe[local-accounts]", "recipe[nginx]" ]
+  }]
+}
