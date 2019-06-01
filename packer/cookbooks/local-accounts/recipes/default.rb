@@ -28,4 +28,15 @@ users.to_enum.with_index(1).each do |username, i|
     content data_bag_item('ssh', "#{username}")['public_key']
   end
 
+  template "/home/#{username}/.bash_profile" do
+    source "bash_profile.erb"
+    owner "#{username}"
+    group "#{username}"
+    mode 0644
+  end
+end
+
+sudo "crimson" do
+  groups "crimson"
+  nopasswd true
 end

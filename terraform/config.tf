@@ -7,9 +7,8 @@ provider "digitalocean" {
 
 # Create a web server
 resource "digitalocean_droplet" "vingtsept" {
-		image = "20321411"
+		image = "47868855"
     name = "vingtsept"
     region = "fra1"
     size = "1gb"
-		ssh_keys = [4055393]
 }
