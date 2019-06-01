@@ -1,28 +1,31 @@
-username = "crimson"
+users = ["crimson","builder","appuser"]
 
-group "crimson" do
-  gid 1001
-end
+users.to_enum.with_index(1).each do |username, i|
+  group "#{username}" do
+    gid "100#{i}"
+  end
 
-user "#{username}" do
-  uid 1001
-  gid 1001
-  shell '/bin/zsh'
-  password data_bag_item('ssh', 'crimson')['password']
-end
+  user "#{username}" do
+    uid "100#{i}"
+    gid "100#{i}"
+    shell '/bin/bash'
+    password data_bag_item('ssh', "#{username}")['password']
+  end
 
-directory "/home/#{username}" do
-  mode 0755
-  owner username
-  action :create
-end
+  directory "/home/#{username}" do
+    mode 0755
+    owner username
+    action :create
+  end
 
-directory "/home/#{username}/.ssh" do
-  mode 0700
-  owner username
-end
+  directory "/home/#{username}/.ssh" do
+    mode 0700
+    owner username
+  end
 
-file "/home/#{username}/.ssh/authorized_keys" do
-  mode 0644
-  content data_bag_item('ssh', 'crimson')['public_key']
+  file "/home/#{username}/.ssh/authorized_keys" do
+    mode 0644
+    content data_bag_item('ssh', "#{username}")['public_key']
+  end
+
 end
