@@ -1,0 +1,12 @@
+- name: "Provision image"
+  hosts: default
+  gather_facts: no
+  remote_user: root
+  become: true
+  roles:
+    - common
+  handlers:
+    - name: Restart sshd
+      service:
+        name: "sshd"
+        state: restarted

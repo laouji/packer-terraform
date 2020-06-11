@@ -7,7 +7,7 @@ provider "digitalocean" {
 
 # Create a web server
 resource "digitalocean_droplet" "vingtsept" {
-		image = "47868855"
+		image = "65047971"
     name = "vingtsept"
     region = "fra1"
     size = "1gb"

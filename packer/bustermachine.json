@@ -1,20 +1,25 @@
 {
+  "variables": {
+    "do_token": ""
+  },
   "builders": [{
     "type": "digitalocean",
-    "api_token": "nottherealtoken",
+    "api_token": "{{user `do_token`}}",
     "region": "fra1",
-    "size": "512mb",
-    "image": "centos-7-x64",
+    "size": "1gb",
+    "image": "ubuntu-18-04-x64",
     "ssh_pty": true,
     "ssh_username": "root",
     "droplet_name": "bustermachine",
     "snapshot_name": "bustermachine-img-{{timestamp}}"
   }],
   "provisioners": [{
-    "type": "chef-solo",
-    "cookbook_paths": ["cookbooks"],
-    "chef_license": "accept",
-    "data_bags_path": "data_bags",
-    "run_list": [ "recipe[local-accounts]", "recipe[nginx]" ]
+    "type": "ansible",
+    "playbook_file": "./ansible/playbook.yml",
+    "use_proxy": false,
+    "extra_arguments": [
+      "-v", 
+      "--extra-vars", "admin_user_name={{user `admin_user_name`}} admin_password_hash={{user `admin_password_hash`}} admin_ssh_key_path={{user `admin_ssh_key_path`}}"
+    ]
   }]
 }

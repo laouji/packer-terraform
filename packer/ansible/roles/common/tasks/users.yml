@@ -1,0 +1,35 @@
+- name: Add admin user 
+  user:
+    name: "{{ admin_user_name }}"
+    shell: /bin/bash
+    password: "{{ admin_password_hash }}"
+    state: present
+
+- name: Add admin user to sudoers
+  copy:
+    dest: "/etc/sudoers.d/{{ admin_user_name }}"
+    content: "{{ admin_user_name }}  ALL=(ALL)  NOPASSWD: ALL"
+
+- name: Deploy ssh key
+  authorized_key:
+    user: "{{ admin_user_name }}"
+    key: "{{ lookup('file', admin_ssh_key_path) }}"
+    state: present
+
+- name: Disable password authentication
+  lineinfile:
+    path: "/etc/ssh/sshd_config"
+    regexp: "^PasswordAuthentication"
+    line: "PasswordAuthentication no"
+    state: present
+    backup: yes
+
+- name: Disable root login
+  lineinfile:
+    path: "/etc/ssh/sshd_config"
+    regexp: "^PermitRootLogin"
+    line: "PermitRootLogin no"
+    state: present
+    backup: yes
+  notify:
+    - Restart sshd
