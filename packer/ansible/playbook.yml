@@ -5,8 +5,3 @@
   become: true
   roles:
     - common
-  handlers:
-    - name: Restart sshd
-      service:
-        name: "sshd"
-        state: restarted
